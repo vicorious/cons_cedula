@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListarSaldosComponent } from './conscedula/listar-saldos/listar-saldos.component'
+import { ListarSaldosComponent } from './conscedula/listar-saldos/listar-saldos.component';
+import { ConscedulaComponent } from './conscedula/conscedula.component';
+
 
 
 const routes: Routes = [
-  {path:'saldos_subctas',component:ListarSaldosComponent}
+  {path: '', redirectTo: '/cons_cedula', pathMatch: 'full'},
+  {path:'saldos_subctas',component:ListarSaldosComponent},
+  {path:'cons_cedula',component:ConscedulaComponent}
 
 ];
 

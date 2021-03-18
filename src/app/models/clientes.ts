@@ -1,7 +1,4 @@
-export interface Clientes {
-  ndocumento:string;
-  encargo:string;
-  contrato:string;
-
-
+export interface Clientes 
+{
+    ndocumento:string;
 }

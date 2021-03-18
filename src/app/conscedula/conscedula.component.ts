@@ -1,95 +1,215 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlianzafServiceService } from '../services/alianzaf-service.service';
 import { Clientes } from '../models/clientes';
-import Swal from 'sweetalert2';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+
+@Component
+(
+    {
+        selector: 'app-conscedula',
+        templateUrl: './conscedula.component.html',
+        styleUrls: ['./conscedula.component.css']
+    }
+)
+export class ConscedulaComponent implements OnInit 
+{
+    @ViewChild(MatPaginator)
+    paginator!: MatPaginator;
+    @ViewChild(MatSort)
+    sort!: MatSort;
+
+  displayedColumns: string[] = [ 'fondo',  'contrato', 'fondo1','digito', 'estado', 'nombre', 'clasetitu', 'estadot', 'clase', 
+                                'relacion', 'fechaa', 'direccion', 'ciudad', 'tele', 'ejecutivo', 'fechac',
+                                  'compartimiento' ];
+  dataSource: MatTableDataSource<any>;
+
+  DATASOURCE: any[] =
+  [
+      {
+          "cedula": 10101010011,
+          "fondo": 1123123123,
+          "contrato": 100020202,
+          "digito": 0,
+          "clasetitu": "Alejandro Lindarte",
+          "nombre":"ALEJO LINDARTE",
+          "relacion": "A",
+          "estadot": "ACV",
+          "nombrecuenta": "CTA LA VERGA",
+          "estado": "ACTIVO",
+          "fechac": "1992/11/22",
+          "ejecutivo": "EJECTUVO PRUEBA",
+          "tele": 6908723,
+          "direccion": "Carrera 106a #143-31",
+          "ciudad": "BOGOTA",
+          "ttpadescripcion": "PERSONA NATURAL",
+          "fechaa": "29/11/1992",
+          "clase": "Principal",
+          "compartimiento": "ALAA"
+       },
+
+       {
+        "cedula": 10101010011,
+        "fondo": 1123123123,
+        "contrato": 100000202,
+        "digito": 0,
+        "clasetitu": "Carlos barrera",
+        "nombre":"ALEJO LINDARTE",
+        "relacion": "I",
+        "estadot": "ACV",
+        "nombrecuenta": "CTA LA VERGA",
+        "estado": "ACTIVO",
+        "fechac": "1992/11/22",
+        "ejecutivo": "EJECTUVO PRUEBA",
+        "tele": 6908723,
+        "direccion": "Carrera 106a #143-31",
+        "ciudad": "BOGOTA",
+        "ttpadescripcion": "PERSONA NATURAL",
+        "fechaa": "29/11/1992",
+        "clase": "Principal",
+        "compartimiento": "ALAA"
+     }   ,
+     {
+        "cedula": 43331212,
+        "fondo": 11232,
+        "contrato": 100000202,
+        "digito": 1,
+        "clasetitu": "Carlos barrera",
+        "nombre":"ALEJO LINDARTE",
+        "relacion": "A",
+        "estadot": "ACV",
+        "nombrecuenta": "CTA LA VERGA",
+        "estado": "ACTIVO",
+        "fechac": "1992/11/22",
+        "ejecutivo": "EJECTUVO PRUEBA",
+        "tele": 690223323,
+        "direccion": "Carrera 106a #143-31",
+        "ciudad": "BOGOTA",
+        "ttpadescripcion": "PERSONA NATURAL",
+        "fechaa": "29/11/1992",
+        "clase": "Principal",
+        "compartimiento": "ALAA"
+     }      
+  ]
 
 
-
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-
-
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
-
-@Component({
-  selector: 'app-conscedula',
-  templateUrl: './conscedula.component.html',
-  styleUrls: ['./conscedula.component.css']
-})
-
-export class ConscedulaComponent implements OnInit {
-
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
-
-
-  displayedColumnsencargo: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSourceencargo = ELEMENT_DATA;
+  displayedColumnsencargo: string[] = ['Nombre', 'Identificacion', 'Tipo de lista', 'Clase de lista'];
+  dataSourceencargo:  MatTableDataSource<any>;
 
   displayedColumnscontrato: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSourcecontrato = ELEMENT_DATA;
+  dataSourcecontrato: MatTableDataSource<any>;
 
-modelo: Clientes = {ndocumento :'',encargo:'',contrato:''}
+  modelo: Clientes = {ndocumento :'N/A'}
 
 
-respuestamovimiento:boolean= true;
+  submit_findAll:boolean= false;
+  submit_encargo:boolean= false;
+  submit_contrato:boolean= false;
 
-  constructor(private conectar:AlianzafServiceService) {
+  bgColor: string = this.getRandomColor(false);
 
+  accent : string = "accent";
+
+  constructor(private conectar:AlianzafServiceService, private _snackBar: MatSnackBar) 
+  {
+      this.dataSource = new MatTableDataSource();
+      this.dataSourceencargo = new MatTableDataSource();
+      this.dataSourceencargo.data = [];
+      this.dataSourcecontrato = new MatTableDataSource();
   }
 
-  ngOnInit() {
+  ngOnInit() 
+  {}
+
+  ngAfterViewInit() 
+  {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
   }
-   submit(){
+   
+  submit()
+  {
+      
+      this.submit_findAll = false;
+      this.submit_encargo = false;
+      this.submit_contrato = false;
 
-      this.conectar.findAll(this.modelo.ndocumento).subscribe(data => {
-          this.respuestamovimiento =false;
+      this.dataSource = new MatTableDataSource(this.DATASOURCE);
+      /*this.conectar.findAll(this.modelo.ndocumento).subscribe
+      (
+          data => 
+          {
+              this.dataSource.data = data;
+              this.submit_findAll = false;                          
+          },
+          error =>
+          {
+              this.submit_findAll = false; 
+              this.openSnackBar(error, '');
 
-         this.dataSource = data;
-         console.log(data);
-         var mensaje = JSON.stringify(data.mensaje);
-         var errormsg = mensaje.replace(/["]/g, "");
+          }
+          
+      )
 
-          Swal.fire({
-              icon: 'error',
-              title: '...Mensaje De Error...',
-              text :errormsg
-            });
+      this.submit_findAll = false; 
+      this.conectar.findAllEncargo(this.modelo.ndocumento).subscribe
+      (
+          data => 
+          {
+              this.dataSourceencargo.data = data;
+              this.submit_encargo = false;
 
-      })
+          },
+          error =>
+          {
+              this.submit_encargo = false;
+              this.openSnackBar(error, '');
 
-      this.conectar.findAllEncargo(this.modelo.encargo).subscribe(data => {
-        this.respuestamovimiento =false;
-
-       this.dataSource = data;
-
-    })
+          }
+      )
 
 
-    this.conectar.findAllContrato(this.modelo.contrato).subscribe(data => {
-      this.respuestamovimiento =false;
+    this.conectar.findAllContrato(this.modelo.ndocumento).subscribe
+    (
+          data => 
+          {              
+                this.dataSourcecontrato = data;
+                this.submit_contrato = false;
 
-     this.dataSource = data;
+          },
+          error =>
+          {
+                this.submit_contrato = false;
+                this.openSnackBar(error, '');
 
-  })
+          }
+    )*/
+
 
 
    }
+
+    getRandomColor(is_white: boolean) 
+    {
+        var gray = "#" + "999999"
+        var white = "#" + "ffffff"
+        return is_white ? gray : white;
+    }
+
+   back()
+   {
+        this.dataSource.data = [];
+        this.dataSourceencargo.data = [];
+   }
+
+    openSnackBar(message: string, action: string) 
+    {
+        this._snackBar.open(message, action, 
+        {
+            duration: 2000,
+        });
+
+    }
 }

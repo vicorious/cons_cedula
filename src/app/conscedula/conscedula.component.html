@@ -1,258 +1,250 @@
-<header>
-  <div class="container">
-    <h1>Alianza</h1>
-  </div>
-</header>
+<div *ngIf="dataSource.data.length > 0 || dataSourceencargo.data.length > 0">
 
-<div class="row" *ngIf="respuestamovimiento" >
-
-  <div class="col-lg-3">
-    <p>&nbsp;</p>
-  </div>
-  <div class="col-lg-6">
-    <p>&nbsp;</p>
-    <div class="signup-form-container border border-primary rounded">
-      <div class="card">
-        <div class="login-box">
-          <div class="card-body login-card-body">
-            <form role="form">
-              <!---inicio encabezado formulario->-->
-              <div class="form-header">
-                <h3 class="form-title">
-                  <i class="fa fa-user"></i> Consulta Fondos Por Cedula
-                </h3>
-
-                <div class="pull-right">
-                  <h3 class="form-title">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                  </h3>
-                </div>
-                <!---fin encabezado formulario->-->
-                <!---inicio cuerpo formulario->-->
-                <div class="form-body">
-                  <div class="form-group">
-                    <div class="input-group">
-                      <input
-                        name="cedula"
-                        type="text"
-                        class="form-control"
-                        placeholder="Digite el Documento del Cliente"
-                        [(ngModel)]="modelo.ndocumento"
-                      />
-
-                    </div>
-                    <span class="help-block" id="error"></span>
-                  </div>
-                </div>
-                <!---fin cuerpo formulario -->
-                <!---inicio pie formulario -->
-                <div class="form-footer">
-                  <button type="submit" class="btn btn-info" (click)="submit()">
-                    <span class="glyphicon glyphicon-log-in"></span> Enviar
-                  </button>
-                </div>
-                <!---fin pie formulario -->
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-3">
-    <p>&nbsp;</p>
-  </div>
+<mat-card>
+  <mat-label> <strong>DATOS POR CEDULA:</strong></mat-label> 
+  <br/>
+</mat-card>
 </div>
+<br/>
+
+<mat-card *ngIf="dataSource.data.length === 0" style="width: 600px ;margin:2% auto; height: 500px;" >
+    <mat-label style="font-size: x-large !important; color:darkslateblue"> <strong>Consultas de Fondos</strong></mat-label>
+    <br/>
+    <br/>
+    <br/>
+    <div style="display: flex;align-items: stretch">
+    <img style="height:54px;border-width:0px; padding-right: 2%;" src="../../assets/logoEmpresa.gif"/>
+    <br/>
+    <br/>
+  
+    <mat-label> <strong style="font-weight: 700; font-size: x-large; color: #000066; margin-top: 2%; position: absolute;">Consultas de Fondos por Cédula</strong></mat-label>
+  </div>
+    <br/>
+<hr/>
+<p>
+  
+  <mat-form-field appearance="legacy">
+    <mat-label style="text-align: center;">Numero de cédula</mat-label>
+    <input type="number" matInput placeholder="debe ingresar cedula" [(ngModel)]="modelo.ndocumento">
 
 
-<div class="row" *ngIf="respuestamovimiento == false" >
+  </mat-form-field>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <br/>
+  <br/>
+  <button mat-raised-button color="primary" type="submit" class="btn btn-info" style="width: 15%;" (click)="submit()">
+    <span class="glyphicon glyphicon-log-in"></span> ACEPTAR
+</button>  
+
+
+  
+</p>
+
+
+</mat-card>
+
+<button style="float: right;
+margin-top: -7%; background-color: dimgray !important;" *ngIf="dataSource.data.length > 0 || dataSourceencargo.data.length > 0" mat-raised-button color="primary" type="submit" class="btn btn-info" (click)="back()">
+  <span class="glyphicon glyphicon-log-in"></span> Volver
+</button>
+
+<mat-progress-bar mode='indeterminate' *ngIf="submit_findAll"></mat-progress-bar>
+                
+<div *ngIf="dataSource.data.length > 0 || dataSourceencargo.data.length > 0">
+
+  <div style="display: flex;align-items: stretch">
+    <img style="height:54px;border-width:0px; padding-right: 30%;" src="../../assets/logoEmpresa.gif"/>
+    <br/>
+    <br/>
+  
+    <mat-label> <strong style="font-weight: 700; font-size: x-large; color: #000066; margin-top: 2%; position: absolute;">Datos por Cédula</strong></mat-label>
+  </div>
+  <br/>
+  <br/>
+
+<mat-card>
+  <mat-label><strong>Cédula: {{modelo.ndocumento}}</strong></mat-label>
+</mat-card>
+<br/>
+  <mat-card>
+    <mat-label style="color:darkblue"><strong>ENCARGOS DONDE ES TITULAR:</strong></mat-label>
+  </mat-card>
+
+  <mat-table [dataSource]="dataSource" matSort>
+
+
+    <ng-container matColumnDef="fondo">
+      <mat-header-cell *matHeaderCellDef> ... </mat-header-cell>
+      <mat-cell *matCellDef="let element"> ► </mat-cell>
+    </ng-container>
+
+    
+        <!-- Weight Column -->
+        <ng-container matColumnDef="contrato">
+          <mat-header-cell *matHeaderCellDef> Contrato </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.contrato}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fondo1">
+      <mat-header-cell *matHeaderCellDef> ... </mat-header-cell>
+      <mat-cell *matCellDef="let element"> ► </mat-cell>
+    </ng-container>
+
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="digito">
+      <mat-header-cell *matHeaderCellDef> Digito </mat-header-cell>
+      <mat-cell style="padding: 0 0 0 15px;" *matCellDef="let element"> {{element.digito}} </mat-cell>
+    </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="estado">
+    <mat-header-cell *matHeaderCellDef> Estado Encargo </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.estado}} </mat-cell>
+  </ng-container>    
+
+  
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="nombre">
+    <mat-header-cell *matHeaderCellDef> Nombre Encargo </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+  </ng-container> 
+
+       <!-- Symbol Column -->
+       <ng-container matColumnDef="clasetitu">
+        <mat-header-cell *matHeaderCellDef> Titular </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.clasetitu}} </mat-cell>
+      </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="estadot">
+      <mat-header-cell *matHeaderCellDef> Estado Titular </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.estadot}} </mat-cell>
+    </ng-container>      
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="clase">
+      <mat-header-cell *matHeaderCellDef> Tipo Titular </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.clase}} </mat-cell>
+    </ng-container>
+
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="relacion">
+          <mat-header-cell *matHeaderCellDef>  Relación titular encargo </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.relacion}} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+<ng-container matColumnDef="fechaa">
+  <mat-header-cell *matHeaderCellDef>  Fecha Ingreso</mat-header-cell>
+  <mat-cell *matCellDef="let element"> {{element.fechaa}} </mat-cell>
+</ng-container>
+
+ <ng-container matColumnDef="direccion">
+  <mat-header-cell *matHeaderCellDef> Dir. Corres </mat-header-cell>
+  <mat-cell *matCellDef="let element"> {{element.direccion}} </mat-cell>
+</ng-container>
+<!-- Symbol Column -->
+<ng-container matColumnDef="ciudad">
+  <mat-header-cell *matHeaderCellDef> Ciu. Corres </mat-header-cell>
+  <mat-cell *matCellDef="let element"> {{element.ciudad}} </mat-cell>
+</ng-container>
+ <!-- Symbol Column -->
+ <ng-container matColumnDef="tele">
+  <mat-header-cell *matHeaderCellDef> Tel </mat-header-cell>
+  <mat-cell *matCellDef="let element"> {{element.tele}} </mat-cell>
+</ng-container>
+ <!-- Symbol Colu -->
+
+ 
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="ejecutivo">
+    <mat-header-cell *matHeaderCellDef> Ejecutivo </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ejecutivo}} </mat-cell>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="fechac">
+    <mat-header-cell *matHeaderCellDef> F. Cancel </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.fechac}} </mat-cell>
+  </ng-container>  
+
+  <!-- Symbol Column -->
+<ng-container matColumnDef="compartimiento">
+  <mat-header-cell *matHeaderCellDef style="width: 60%;"> Compartimiento </mat-header-cell>
+  <mat-cell *matCellDef="let element"> {{element.compartimiento}} </mat-cell>
+</ng-container>
+
+    <mat-header-row style="color: white; background-color: darkblue;" *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row  *matRowDef="let row; columns: displayedColumns;"></mat-row>    
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <br/>
+
+  <div *ngIf="dataSource.data.length === 0" style="color:darkred; margin: 0 auto">No existen registros para encargo titular</div>
+
+  <mat-progress-bar mode='indeterminate' [color]="accent" *ngIf="submit_encargo"></mat-progress-bar>
+
+  <br/>
+
+  <mat-card style="display: flex; align-self: start;">
+    <mat-label style="color: darkblue"><strong>ENCARGOS DONDE ES FIRMA AUTORIZADA:</strong></mat-label>
+    <div *ngIf="dataSourceencargo.data.length === 0" style="color:darkred; margin: 0 5%"><strong>SIN ENCARGOS</strong></div>
+  </mat-card>
+
+<div *ngIf="dataSourceencargo.data.length > 0">
+  <mat-table [dataSource]="dataSourceencargo" >
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
     <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.fondo}} </td>
+    <ng-container matColumnDef="Nombre">
+      <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.contrato}} </td>
+    <ng-container matColumnDef="Identificacion">
+      <mat-header-cell *matHeaderCellDef> Identificacion </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
     </ng-container>
 
     <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.digito}} </td>
+    <ng-container matColumnDef="Tipo de lista">
+      <mat-header-cell *matHeaderCellDef> Tipo Firma </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.tipol}} </mat-cell>
     </ng-container>
 
     <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.clase}} </td>
+    <ng-container matColumnDef="Clase de lista">
+      <mat-header-cell *matHeaderCellDef> Clase Firma </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.clasel}} </mat-cell>
     </ng-container>
 
-     <!-- Symbol Column -->
-     <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.clasetitu}} </td>
-    </ng-container>
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol">
-          <th mat-header-cell *matHeaderCellDef> Symbol </th>
-          <td mat-cell *matCellDef="let element"> {{element.nombreinversionista}} </td>
-        </ng-container>
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.estadot}} </td>
-    </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.FECHAa}} </td>
-  </ng-container>
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.nombrecuenta}} </td>
-  </ng-container>
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
-  </ng-container>
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.fechac}} </td>
-  </ng-container>
- <!-- Symbol Column -->
- <ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.ejecutivo}} </td>
-</ng-container>
- <!-- Symbol Column -->
- <ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.tele}} </td>
-</ng-container>
-<!-- Symbol Column -->
-<ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.direccion}} </td>
-</ng-container>
-<!-- Symbol Column -->
-<ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.ciudad}} </td>
-</ng-container>
-<!-- Symbol Column -->
-<ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.ttpadescripcion}} </td>
-</ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.fondo}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.contrato}} </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.digito}} </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.clase}} </td>
-    </ng-container>
-
-     <!-- Symbol Column -->
-     <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.clasetitu}} </td>
-    </ng-container>
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol">
-          <th mat-header-cell *matHeaderCellDef> Symbol </th>
-          <td mat-cell *matCellDef="let element"> {{element.nombreinversionista}} </td>
-        </ng-container>
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.estadot}} </td>
-    </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.FECHAa}} </td>
-  </ng-container>
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.nombrecuenta}} </td>
-  </ng-container>
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
-  </ng-container>
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.fechac}} </td>
-  </ng-container>
- <!-- Symbol Column -->
- <ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.ejecutivo}} </td>
-</ng-container>
- <!-- Symbol Column -->
- <ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.tele}} </td>
-</ng-container>
-<!-- Symbol Column -->
-<ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.direccion}} </td>
-</ng-container>
-<!-- Symbol Column -->
-<ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.ciudad}} </td>
-</ng-container>
-<!-- Symbol Column -->
-<ng-container matColumnDef="symbol">
-  <th mat-header-cell *matHeaderCellDef> Symbol </th>
-  <td mat-cell *matCellDef="let element"> {{element.ttpadescripcion}} </td>
-</ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+    <mat-header-row style="color: white; background-color: darkblue;" *matHeaderRowDef="displayedColumnsencargo"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumnsencargo;"></mat-row>    
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 
 </div>
+  <br/>
+  
+
+
+  <br/>
+
+</div>
+<div style="margin-left: 1%;">
+  <p>
+    <mat-label style="font-weight: 400;
+    font-size: inherit;
+    color: #1851a7;">Si tiene problemas con esta aplicacion, contacte al Administrador de la solución</mat-label>
+    <br/>
+    <mat-label style="font-weight: 400;
+    font-size: inherit;
+    color: #1851a7;">© 2021 Sistemas - Alianza Fiduciaria S.A.</mat-label>
+  </p>
+</div>
+
